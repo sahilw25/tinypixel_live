@@ -1,0 +1,13 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/casestudies/page": "app/casestudies/page.js",
+  "/casestudies/ozo-ads/page": "app/casestudies/ozo-ads/page.js",
+  "/casestudies/playspot/page": "app/casestudies/playspot/page.js",
+  "/page": "app/page.js",
+  "/contact/page": "app/contact/page.js",
+  "/casestudies/timeslot/page": "app/casestudies/timeslot/page.js",
+  "/personal-portfolio/page": "app/personal-portfolio/page.js",
+  "/portfolio/page": "app/portfolio/page.js",
+  "/services/product-design/page": "app/services/product-design/page.js",
+  "/services/web-design/page": "app/services/web-design/page.js"
+}

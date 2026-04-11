@@ -1,0 +1,1442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hoarding — UX Case Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0f0f0d;
+    --ink-2: #3a3a36;
+    --ink-3: #7a7a74;
+    --surface: #fafaf7;
+    --surface-2: #f2f1ec;
+    --surface-3: #e8e6df;
+    --accent: #d45a1e;
+    --accent-light: #faeee6;
+    --accent-2: #1a6b5c;
+    --accent-2-light: #e3f2ef;
+    --accent-3: #2c4fa8;
+    --accent-3-light: #e8edf9;
+    --yellow: #e8a320;
+    --yellow-light: #fdf4e3;
+    --border: rgba(15,15,13,0.1);
+    --border-strong: rgba(15,15,13,0.2);
+    --font-display: 'Syne', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+    --font-mono: 'DM Mono', monospace;
+    --radius: 4px;
+    --radius-lg: 12px;
+    --radius-xl: 20px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--surface);
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(250,250,247,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 60px;
+  }
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 18px; font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+  .nav-logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a {
+    font-size: 13px; font-weight: 500; color: var(--ink-3);
+    text-decoration: none; letter-spacing: 0.02em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--ink); }
+
+  /* HERO */
+  .hero {
+    padding: 100px 40px 80px;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+  }
+  .hero-label {
+    font-family: var(--font-mono);
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent);
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-bottom: 24px;
+  }
+  .hero-label::before {
+    content: '';
+    width: 24px; height: 1px;
+    background: var(--accent);
+  }
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(42px, 5vw, 68px);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -2px;
+    color: var(--ink);
+    margin-bottom: 24px;
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--accent);
+  }
+  .hero-desc {
+    font-size: 17px; color: var(--ink-2); line-height: 1.6;
+    margin-bottom: 32px; max-width: 440px;
+  }
+  .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag {
+    font-size: 12px; font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 100px;
+    border: 1px solid var(--border-strong);
+    color: var(--ink-2);
+    background: white;
+  }
+  .hero-visual {
+    background: var(--ink);
+    border-radius: var(--radius-xl);
+    padding: 40px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-visual::before {
+    content: '';
+    position: absolute; top: -40px; right: -40px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.15;
+  }
+  .hero-stat-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    position: relative; z-index: 1;
+  }
+  .hero-stat {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+  }
+  .hero-stat .num {
+    font-family: var(--font-display);
+    font-size: 32px; font-weight: 800;
+    color: white; line-height: 1;
+    margin-bottom: 4px;
+  }
+  .hero-stat .num span { color: var(--accent); font-size: 22px; }
+  .hero-stat .lbl {
+    font-size: 11px; font-weight: 500;
+    color: rgba(255,255,255,0.45);
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .hero-stat.accent-card {
+    background: var(--accent);
+    border-color: transparent;
+    grid-column: span 2;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .hero-stat.accent-card .num { color: white; font-size: 22px; }
+  .hero-stat.accent-card .lbl { color: rgba(255,255,255,0.7); }
+
+  /* SECTION WRAPPERS */
+  section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 80px 40px;
+  }
+  .section-divider {
+    max-width: 1200px; margin: 0 auto;
+    padding: 0 40px;
+  }
+  .divider-line {
+    border: none;
+    border-top: 1px solid var(--border);
+  }
+  .section-header {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    margin-bottom: 56px;
+    gap: 40px;
+  }
+  .section-header.centered {
+    flex-direction: column; align-items: center; text-align: center;
+  }
+  .section-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent);
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-bottom: 12px;
+  }
+  .section-eyebrow::before {
+    content: '';
+    width: 20px; height: 1px;
+    background: var(--accent);
+  }
+  h2.section-title {
+    font-family: var(--font-display);
+    font-size: clamp(28px, 3.5vw, 44px);
+    font-weight: 800; line-height: 1.1;
+    letter-spacing: -1.5px;
+  }
+  .section-subtitle {
+    font-size: 16px; color: var(--ink-3); max-width: 460px; line-height: 1.6;
+    margin-top: 12px;
+  }
+
+  /* OVERVIEW STRIP */
+  .overview-strip {
+    background: var(--ink);
+    padding: 64px 40px;
+  }
+  .overview-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+    background: rgba(255,255,255,0.1);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .overview-item {
+    background: var(--ink);
+    padding: 32px 28px;
+  }
+  .overview-item .oi-label {
+    font-family: var(--font-mono);
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 10px;
+  }
+  .overview-item .oi-value {
+    font-family: var(--font-display);
+    font-size: 15px; font-weight: 700; color: white;
+    line-height: 1.3;
+  }
+
+  /* PROBLEM SECTION */
+  .problem-layout {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
+  }
+  .problem-quote {
+    font-family: var(--font-display);
+    font-size: 26px; font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.5px;
+    color: var(--ink);
+    border-left: 3px solid var(--accent);
+    padding-left: 24px;
+    margin: 32px 0;
+  }
+  .problem-body { font-size: 16px; color: var(--ink-2); line-height: 1.75; }
+  .pain-cluster-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  }
+  .pain-cluster {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    background: white;
+    position: relative;
+    overflow: hidden;
+  }
+  .pain-cluster::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 3px; height: 100%;
+  }
+  .pain-cluster.c1::before { background: var(--accent); }
+  .pain-cluster.c2::before { background: var(--accent-2); }
+  .pain-cluster.c3::before { background: var(--accent-3); }
+  .pain-cluster.c4::before { background: var(--yellow); }
+  .pain-cluster.c5::before { background: #9b59b6; }
+  .pain-cluster.c6::before { background: #e84393; }
+  .pain-cluster.c7::before { background: #1abc9c; }
+  .pain-cluster h4 {
+    font-family: var(--font-display);
+    font-size: 13px; font-weight: 700;
+    margin-bottom: 4px; letter-spacing: -0.2px;
+  }
+  .pain-cluster p {
+    font-size: 11px; color: var(--ink-3); line-height: 1.5;
+    font-family: var(--font-mono);
+  }
+
+  /* PERSONAS */
+  .personas-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+  }
+  .persona-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    background: white;
+    padding: 28px 24px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .persona-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+  }
+  .persona-avatar {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display);
+    font-size: 18px; font-weight: 800;
+    margin-bottom: 16px;
+  }
+  .p1 .persona-avatar { background: var(--accent-light); color: var(--accent); }
+  .p2 .persona-avatar { background: var(--accent-2-light); color: var(--accent-2); }
+  .p3 .persona-avatar { background: var(--accent-3-light); color: var(--accent-3); }
+  .p4 .persona-avatar { background: var(--yellow-light); color: var(--yellow); }
+  .persona-name {
+    font-family: var(--font-display);
+    font-size: 16px; font-weight: 800;
+    margin-bottom: 2px;
+  }
+  .persona-role {
+    font-size: 12px; color: var(--ink-3); margin-bottom: 16px;
+    font-weight: 500;
+  }
+  .persona-quote {
+    font-size: 13px; color: var(--ink-2);
+    font-style: italic;
+    line-height: 1.5;
+    border-top: 1px solid var(--border);
+    padding-top: 14px;
+    margin-top: 4px;
+  }
+  .persona-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+  .persona-pill {
+    font-size: 11px; font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 100px;
+    background: var(--surface-2);
+    color: var(--ink-2);
+  }
+  .p1 .persona-pill { background: var(--accent-light); color: var(--accent); }
+  .p2 .persona-pill { background: var(--accent-2-light); color: var(--accent-2); }
+  .p3 .persona-pill { background: var(--accent-3-light); color: var(--accent-3); }
+  .p4 .persona-pill { background: var(--yellow-light); color: #7a4f00; }
+
+  /* JOURNEY MAP */
+  .journey-table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+  }
+  .journey-table {
+    width: 100%; border-collapse: collapse;
+    font-size: 13px;
+  }
+  .journey-table th {
+    background: var(--ink);
+    color: rgba(255,255,255,0.5);
+    font-family: var(--font-mono);
+    font-size: 10px; letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 14px 20px;
+    text-align: left;
+    white-space: nowrap;
+  }
+  .journey-table td {
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    color: var(--ink-2);
+    line-height: 1.55;
+  }
+  .journey-table tr:last-child td { border-bottom: none; }
+  .journey-table tr:nth-child(even) td { background: var(--surface); }
+  .stage-name {
+    font-family: var(--font-display);
+    font-size: 13px; font-weight: 700; color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .stage-num {
+    font-family: var(--font-mono);
+    font-size: 10px; color: var(--accent);
+    letter-spacing: 0.08em;
+  }
+  .feeling-pill {
+    display: inline-block;
+    font-size: 11px; font-weight: 500;
+    padding: 3px 9px; border-radius: 100px;
+    margin: 2px 2px 2px 0;
+  }
+  .feel-positive { background: var(--accent-2-light); color: var(--accent-2); }
+  .feel-neutral { background: var(--surface-2); color: var(--ink-2); }
+  .feel-negative { background: #fdecea; color: #b83232; }
+  .opp-item {
+    display: flex; align-items: flex-start; gap: 6px;
+    font-size: 12px; margin-bottom: 6px; color: var(--ink-2);
+  }
+  .opp-item::before {
+    content: '→';
+    color: var(--accent);
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-size: 11px;
+  }
+
+  /* HMW */
+  .hmw-section { background: var(--surface-2); }
+  .hmw-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .hmw-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: 28px;
+  }
+  .hmw-persona-label {
+    font-family: var(--font-mono);
+    font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--ink-3); margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .hmw-persona-label::after {
+    content: '';
+    flex: 1; height: 1px;
+    background: var(--border);
+  }
+  .hmw-item {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px; color: var(--ink-2); line-height: 1.5;
+  }
+  .hmw-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .hmw-item strong {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 4px;
+  }
+
+  /* VALUE PROPOSITION */
+  .value-prop-layout {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
+  }
+  .value-prop-statement {
+    font-family: var(--font-display);
+    font-size: 30px; font-weight: 800; line-height: 1.15;
+    letter-spacing: -1px; color: var(--ink);
+    padding: 32px;
+    background: var(--ink);
+    color: white;
+    border-radius: var(--radius-xl);
+    position: relative;
+    overflow: hidden;
+  }
+  .value-prop-statement::after {
+    content: '"';
+    position: absolute; bottom: -20px; right: 20px;
+    font-family: var(--font-display);
+    font-size: 160px; font-weight: 800;
+    color: rgba(255,255,255,0.06);
+    line-height: 1;
+    pointer-events: none;
+  }
+  .value-prop-statement em { font-style: normal; color: var(--accent); }
+  .feature-benefits { display: flex; flex-direction: column; gap: 16px; }
+  .feature-benefit {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    background: white;
+    display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: start;
+  }
+  .feature-benefit-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .feature-benefit h4 {
+    font-family: var(--font-display);
+    font-size: 14px; font-weight: 700; margin-bottom: 4px;
+  }
+  .feature-benefit p {
+    font-size: 13px; color: var(--ink-3); line-height: 1.5;
+  }
+
+  /* EDGE CASES */
+  .edge-cases-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+  }
+  .edge-case-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    background: white;
+  }
+  .edge-case-num {
+    font-family: var(--font-mono);
+    font-size: 11px; color: var(--accent);
+    letter-spacing: 0.1em; margin-bottom: 12px;
+    display: block;
+  }
+  .edge-case-card h4 {
+    font-family: var(--font-display);
+    font-size: 14px; font-weight: 700; margin-bottom: 8px;
+  }
+  .edge-case-card p {
+    font-size: 12px; color: var(--ink-3); line-height: 1.5; margin-bottom: 12px;
+  }
+  .edge-safeguard {
+    font-size: 11px; font-weight: 600;
+    padding: 6px 10px;
+    background: var(--accent-2-light);
+    color: var(--accent-2);
+    border-radius: var(--radius);
+    display: inline-block;
+    font-family: var(--font-mono);
+    letter-spacing: 0.03em;
+  }
+
+  /* HYPOTHESIS */
+  .hypothesis-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+  }
+  .hypothesis-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: 28px;
+    background: white;
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .hypothesis-persona-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+    font-weight: 500;
+  }
+  .hyp-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+  }
+  .hyp-block {
+    padding: 14px;
+    border-radius: var(--radius);
+    font-size: 13px; line-height: 1.55;
+  }
+  .hyp-block strong {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .hyp-if { background: var(--accent-3-light); }
+  .hyp-if strong { color: var(--accent-3); }
+  .hyp-believe { background: var(--accent-light); }
+  .hyp-believe strong { color: var(--accent); }
+
+  /* FEATURES */
+  .features-section { background: var(--ink); }
+  .features-section .section-eyebrow { color: var(--accent); }
+  .features-section .section-eyebrow::before { background: var(--accent); }
+  .features-section h2.section-title { color: white; }
+  .features-section .section-subtitle { color: rgba(255,255,255,0.4); }
+  .features-grouped {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+    background: rgba(255,255,255,0.08);
+    border-radius: var(--radius-xl); overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .feature-group {
+    background: var(--ink);
+    padding: 28px 24px;
+  }
+  .feature-group-title {
+    font-family: var(--font-display);
+    font-size: 13px; font-weight: 700;
+    color: white; margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .feature-group-icon {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+  }
+  .feature-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .feature-list li {
+    font-size: 12px; color: rgba(255,255,255,0.45);
+    display: flex; align-items: flex-start; gap: 8px;
+    line-height: 1.4;
+  }
+  .feature-list li::before {
+    content: '·';
+    color: var(--accent);
+    font-size: 16px; line-height: 1; flex-shrink: 0;
+  }
+
+  /* USER STORIES */
+  .stories-layout { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .story-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: 28px;
+    background: white;
+  }
+  .story-as {
+    font-family: var(--font-mono);
+    font-size: 11px; letter-spacing: 0.05em;
+    color: var(--ink-3); margin-bottom: 12px;
+  }
+  .story-want {
+    font-family: var(--font-display);
+    font-size: 15px; font-weight: 700; line-height: 1.3;
+    color: var(--ink); margin-bottom: 12px; letter-spacing: -0.3px;
+  }
+  .story-so {
+    font-size: 13px; color: var(--ink-3); line-height: 1.5;
+    border-top: 1px solid var(--border);
+    padding-top: 12px; margin-top: 4px;
+  }
+  .story-so em { font-style: normal; color: var(--ink-2); }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink);
+    padding: 64px 40px;
+    text-align: center;
+  }
+  footer .footer-logo {
+    font-family: var(--font-display);
+    font-size: 28px; font-weight: 800;
+    color: white; letter-spacing: -1px;
+    margin-bottom: 12px;
+  }
+  footer .footer-logo span { color: var(--accent); }
+  footer p {
+    color: rgba(255,255,255,0.3);
+    font-size: 13px; max-width: 440px; margin: 0 auto;
+  }
+
+  /* EMPATHY MAP */
+  .empathy-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl); overflow: hidden;
+  }
+  .empathy-quad {
+    padding: 32px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: white;
+  }
+  .empathy-quad:nth-child(2), .empathy-quad:nth-child(4) { border-right: none; }
+  .empathy-quad:nth-child(3), .empathy-quad:nth-child(4) { border-bottom: none; }
+  .empathy-quad-label {
+    font-family: var(--font-display);
+    font-size: 12px; font-weight: 800;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .empathy-quad-icon {
+    width: 28px; height: 28px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; font-size: 14px;
+  }
+  .eq-says .empathy-quad-label { color: var(--accent-3); }
+  .eq-says .empathy-quad-icon { background: var(--accent-3-light); }
+  .eq-does .empathy-quad-label { color: var(--accent-2); }
+  .eq-does .empathy-quad-icon { background: var(--accent-2-light); }
+  .eq-thinks .empathy-quad-label { color: var(--yellow); }
+  .eq-thinks .empathy-quad-icon { background: var(--yellow-light); }
+  .eq-feels .empathy-quad-label { color: var(--accent); }
+  .eq-feels .empathy-quad-icon { background: var(--accent-light); }
+  .empathy-item {
+    font-size: 13px; color: var(--ink-2);
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.5;
+    display: flex; gap: 8px;
+  }
+  .empathy-item::before {
+    content: '"';
+    color: var(--ink-3); flex-shrink: 0;
+  }
+  .empathy-item:last-child { border-bottom: none; }
+
+  @media (max-width: 900px) {
+    .hero, .problem-layout, .value-prop-layout { grid-template-columns: 1fr; }
+    .personas-grid { grid-template-columns: 1fr 1fr; }
+    .edge-cases-grid { grid-template-columns: 1fr 1fr; }
+    .hmw-grid, .hypothesis-grid { grid-template-columns: 1fr; }
+    .features-grouped { grid-template-columns: 1fr 1fr; }
+    .overview-inner { grid-template-columns: 1fr 1fr; }
+    .stories-layout { grid-template-columns: 1fr; }
+    nav { padding: 0 20px; }
+    section { padding: 60px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Hoar<span>ding</span></div>
+  <ul class="nav-links">
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#problem">Problem</a></li>
+    <li><a href="#personas">Personas</a></li>
+    <li><a href="#journey">Journey</a></li>
+    <li><a href="#solution">Solution</a></li>
+    <li><a href="#features">Features</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" style="padding-bottom: 40px;">
+  <div>
+    <div class="hero-label">UX Case Study · 2025–26</div>
+    <h1>Billboard ads,<br><em>without</em><br>the chaos.</h1>
+    <p class="hero-desc">A transparent, end-to-end platform that lets any business — local café to global brand — discover, book, and manage outdoor advertising campaigns without agencies, guesswork, or hidden costs.</p>
+    <div class="hero-tags">
+      <span class="tag">UX Research</span>
+      <span class="tag">Product Strategy</span>
+      <span class="tag">Interaction Design</span>
+      <span class="tag">Cross-platform</span>
+      <span class="tag">B2B · B2C</span>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-stat-grid">
+      <div class="hero-stat">
+        <div class="num">4<span>×</span></div>
+        <div class="lbl">Persona types</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">7<span>+</span></div>
+        <div class="lbl">Pain clusters</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">12</div>
+        <div class="lbl">Edge cases mapped</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">6</div>
+        <div class="lbl">Journey stages</div>
+      </div>
+      <div class="hero-stat accent-card">
+        <div>
+          <div class="num">Local → Global</div>
+          <div class="lbl">Scales from Tier-2 cities to 50+ countries</div>
+        </div>
+        <div style="font-size: 32px; opacity: 0.6;">🌍</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OVERVIEW STRIP -->
+<div id="overview" class="overview-strip">
+  <div class="overview-inner">
+    <div class="overview-item">
+      <div class="oi-label">Role</div>
+      <div class="oi-value">UX Designer &amp; Researcher</div>
+    </div>
+    <div class="overview-item">
+      <div class="oi-label">Scope</div>
+      <div class="oi-value">Mobile App + Responsive Web Platform</div>
+    </div>
+    <div class="overview-item">
+      <div class="oi-label">Domain</div>
+      <div class="oi-value">Out-of-Home (OOH) Advertising</div>
+    </div>
+    <div class="overview-item">
+      <div class="oi-label">Methods</div>
+      <div class="oi-value">Personas · Journey Maps · HMW · User Stories</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-divider"><hr class="divider-line"></div>
+
+<!-- PROBLEM -->
+<section id="problem">
+  <div class="section-header">
+    <div>
+      <div class="section-eyebrow">01 — The Problem</div>
+      <h2 class="section-title">Billboard advertising is broken<br>by design.</h2>
+    </div>
+    <p class="section-subtitle">What should be a powerful offline channel is trapped behind phone calls, opaque pricing, fragmented vendors, and zero measurement.</p>
+  </div>
+
+  <div class="problem-layout">
+    <div>
+      <div class="problem-quote">"I just want to book it online without calling multiple people."</div>
+      <p class="problem-body">Billboard advertising remains one of the most effective forms of brand awareness — but for most businesses, it's completely inaccessible without an agency or inside connections. Pricing is hidden. Availability is a phone call. Proof of display is a WhatsApp photo.<br><br>The gap between the potential of OOH advertising and the reality of booking it is enormous — and it disproportionately hurts small businesses and new market entrants who need it most.</p>
+    </div>
+    <div>
+      <div class="pain-cluster-grid">
+        <div class="pain-cluster c1">
+          <h4>Discovery overload</h4>
+          <p>Don't know where to start, no audience data, no inventory visibility</p>
+        </div>
+        <div class="pain-cluster c2">
+          <h4>Pricing opacity</h4>
+          <p>Hidden costs, no benchmarks, fear of overpaying, multi-currency confusion</p>
+        </div>
+        <div class="pain-cluster c3">
+          <h4>Low trust &amp; ROI</h4>
+          <p>No proof of display, no verification, no performance metrics</p>
+        </div>
+        <div class="pain-cluster c4">
+          <h4>Operational friction</h4>
+          <p>Manual emails &amp; calls, multiple vendors, no central dashboard</p>
+        </div>
+        <div class="pain-cluster c5">
+          <h4>Creative chaos</h4>
+          <p>Unknown specs, rejection risk, version control nightmares</p>
+        </div>
+        <div class="pain-cluster c6">
+          <h4>Rigidity</h4>
+          <p>Monthly-only bookings, no pausing, no experimentation</p>
+        </div>
+        <div class="pain-cluster c7" style="grid-column: span 2;">
+          <h4>Emotional gap</h4>
+          <p>Post-payment anxiety, no status updates, no human support when stuck</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"><hr class="divider-line"></div>
+
+<!-- PERSONAS -->
+<section id="personas">
+  <div class="section-header">
+    <div>
+      <div class="section-eyebrow">02 — Who We're Designing For</div>
+      <h2 class="section-title">Four users, one platform.</h2>
+    </div>
+    <p class="section-subtitle">From a local café owner to a global marketing director — the platform must serve radically different needs without sacrificing depth or simplicity.</p>
+  </div>
+  <div class="personas-grid">
+    <div class="persona-card p1">
+      <div class="persona-avatar">M</div>
+      <div class="persona-name">Maria Fernandes</div>
+      <div class="persona-role">Local Café Owner · Mid-sized city · Low–Moderate tech</div>
+      <div class="persona-pills">
+        <span class="persona-pill">Budget: Low</span>
+        <span class="persona-pill">1st-timer</span>
+        <span class="persona-pill">Trust-driven</span>
+      </div>
+      <div class="persona-quote">"I don't need fancy marketing — I just want to know it'll actually bring people in."</div>
+    </div>
+    <div class="persona-card p2">
+      <div class="persona-avatar">A</div>
+      <div class="persona-name">Arjun Mehta</div>
+      <div class="persona-role">D2C Startup Founder · Metro city · High tech</div>
+      <div class="persona-pills">
+        <span class="persona-pill">Budget: Mid</span>
+        <span class="persona-pill">Data-driven</span>
+        <span class="persona-pill">Fast-moving</span>
+      </div>
+      <div class="persona-quote">"If I can't test, tweak, and measure it — it's not worth my budget."</div>
+    </div>
+    <div class="persona-card p3">
+      <div class="persona-avatar">S</div>
+      <div class="persona-name">Sarah Thompson</div>
+      <div class="persona-role">National Marketing Manager · HQ city · Moderate–High tech</div>
+      <div class="persona-pills">
+        <span class="persona-pill">Budget: High</span>
+        <span class="persona-pill">Process-first</span>
+        <span class="persona-pill">Reporting-heavy</span>
+      </div>
+      <div class="persona-quote">"I don't want surprises — I want visibility, control, and clean reports."</div>
+    </div>
+    <div class="persona-card p4">
+      <div class="persona-avatar">D</div>
+      <div class="persona-name">Daniel Wong</div>
+      <div class="persona-role">Global Marketing Director · Singapore/London · High tech</div>
+      <div class="persona-pills">
+        <span class="persona-pill">Budget: Very high</span>
+        <span class="persona-pill">Risk-averse</span>
+        <span class="persona-pill">Governance</span>
+      </div>
+      <div class="persona-quote">"If I can't see it, verify it, and govern it — it's a liability."</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"><hr class="divider-line"></div>
+
+<!-- EMPATHY MAP -->
+<section>
+  <div class="section-header">
+    <div>
+      <div class="section-eyebrow">03 — Empathy Map</div>
+      <h2 class="section-title">Inside the user's head.</h2>
+    </div>
+    <p class="section-subtitle">Synthesizing across all four personas to understand the shared emotional and behavioral landscape.</p>
+  </div>
+  <div class="empathy-grid">
+    <div class="empathy-quad eq-says">
+      <div class="empathy-quad-label">
+        <div class="empathy-quad-icon">💬</div> Says
+      </div>
+      <div class="empathy-item">I want to advertise in a busy area, but I don't know where to start.</div>
+      <div class="empathy-item">Why is billboard pricing so unclear?</div>
+      <div class="empathy-item">I just want to book it online without calling multiple people.</div>
+      <div class="empathy-item">I need something quick and reliable.</div>
+    </div>
+    <div class="empathy-quad eq-does">
+      <div class="empathy-quad-label">
+        <div class="empathy-quad-icon">⚙️</div> Does
+      </div>
+      <div class="empathy-item">Searches online for billboard advertising options</div>
+      <div class="empathy-item">Compares locations, prices, and visibility</div>
+      <div class="empathy-item">Uploads creatives or checks design requirements</div>
+      <div class="empathy-item">Reviews confirmation, payment, and campaign status</div>
+    </div>
+    <div class="empathy-quad eq-thinks">
+      <div class="empathy-quad-label">
+        <div class="empathy-quad-icon">💭</div> Thinks
+      </div>
+      <div class="empathy-item">Am I paying too much for this location?</div>
+      <div class="empathy-item">Will this billboard actually get enough visibility?</div>
+      <div class="empathy-item">I hope this platform is trustworthy.</div>
+      <div class="empathy-item">I need proof this is worth my money.</div>
+    </div>
+    <div class="empathy-quad eq-feels">
+      <div class="empathy-quad-label">
+        <div class="empathy-quad-icon">❤️</div> Feels
+      </div>
+      <div class="empathy-item">Confused at the start — too many unknowns</div>
+      <div class="empathy-item">Anxious about cost and campaign effectiveness</div>
+      <div class="empathy-item">Cautiously optimistic when seeing clear options</div>
+      <div class="empathy-item">Relieved and confident once tracking is live</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"><hr class="divider-line"></div>
+
+<!-- JOURNEY MAP -->
+<section id="journey">
+  <div class="section-header">
+    <div>
+      <div class="section-eyebrow">04 — User Journey Map</div>
+      <h2 class="section-title">From "how do I start?"<br>to "my ad is live."</h2>
+    </div>
+    <p class="section-subtitle">Six stages. Every friction point, feeling, and opportunity catalogued.</p>
+  </div>
+  <div class="journey-table-wrap">
+    <table class="journey-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Stage</th>
+          <th>User Actions</th>
+          <th>Emotions</th>
+          <th>Opportunity</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="color: var(--accent); font-family: var(--font-mono); font-size: 12px;">01</td>
+          <td><div class="stage-name">Discover</div><div class="stage-num">Awareness</div></td>
+          <td>Visits platform, searches for billboard options, enters preferred city, views map</td>
+          <td>
+            <span class="feeling-pill feel-neutral">Curious</span>
+            <span class="feeling-pill feel-negative">Unsure</span>
+            <span class="feeling-pill feel-positive">Hopeful</span>
+          </td>
+          <td>
+            <div class="opp-item">Clear "Find Billboards Near You" entry point</div>
+            <div class="opp-item">Location-based recommendations</div>
+            <div class="opp-item">Simple hero messaging, no jargon</div>
+          </td>
+        </tr>
+        <tr>
+          <td style="color: var(--accent); font-family: var(--font-mono); font-size: 12px;">02</td>
+          <td><div class="stage-name">Evaluate</div><div class="stage-num">Research</div></td>
+          <td>Clicks billboard pins, views photos &amp; specs, compares pricing, checks estimated reach</td>
+          <td>
+            <span class="feeling-pill feel-positive">Interested</span>
+            <span class="feeling-pill feel-negative">Confused</span>
+            <span class="feeling-pill feel-neutral">Cautious</span>
+          </td>
+          <td>
+            <div class="opp-item">Side-by-side comparison view</div>
+            <div class="opp-item">Real-world photo previews with street context</div>
+            <div class="opp-item">Plain-language traffic &amp; audience data</div>
+          </td>
+        </tr>
+        <tr>
+          <td style="color: var(--accent); font-family: var(--font-mono); font-size: 12px;">03</td>
+          <td><div class="stage-name">Select &amp; Schedule</div><div class="stage-num">Decision</div></td>
+          <td>Selects billboard, chooses dates, reviews availability calendar, confirms duration</td>
+          <td>
+            <span class="feeling-pill feel-neutral">Focused</span>
+            <span class="feeling-pill feel-negative">Anxious</span>
+            <span class="feeling-pill feel-positive">Hopeful</span>
+          </td>
+          <td>
+            <div class="opp-item">Price lock timer (10 min hold)</div>
+            <div class="opp-item">Availability warnings &amp; scarcity signals</div>
+            <div class="opp-item">Clear cost summary before next step</div>
+          </td>
+        </tr>
+        <tr>
+          <td style="color: var(--accent); font-family: var(--font-mono); font-size: 12px;">04</td>
+          <td><div class="stage-name">Upload Creative</div><div class="stage-num">Production</div></td>
+          <td>Views requirements, uploads file, previews on billboard mockup, fixes errors</td>
+          <td>
+            <span class="feeling-pill feel-negative">Uncertain</span>
+            <span class="feeling-pill feel-positive">Relieved</span>
+            <span class="feeling-pill feel-positive">Confident</span>
+          </td>
+          <td>
+            <div class="opp-item">Free templates for common billboard sizes</div>
+            <div class="opp-item">Real-time mockup preview on actual billboard photo</div>
+            <div class="opp-item">Live file validation (format, size, resolution)</div>
+          </td>
+        </tr>
+        <tr>
+          <td style="color: var(--accent); font-family: var(--font-mono); font-size: 12px;">05</td>
+          <td><div class="stage-name">Review &amp; Pay</div><div class="stage-num">Commitment</div></td>
+          <td>Reviews campaign summary, checks total cost, enters payment, completes booking</td>
+          <td>
+            <span class="feeling-pill feel-negative">Nervous</span>
+            <span class="feeling-pill feel-neutral">Trusting</span>
+            <span class="feeling-pill feel-positive">Relieved</span>
+          </td>
+          <td>
+            <div class="opp-item">Clear refund &amp; cancellation policies upfront</div>
+            <div class="opp-item">Secure payment indicators (SSL, trust badges)</div>
+            <div class="opp-item">Itemised cost breakdown before confirming</div>
+          </td>
+        </tr>
+        <tr>
+          <td style="color: var(--accent); font-family: var(--font-mono); font-size: 12px;">06</td>
+          <td><div class="stage-name">Track &amp; Measure</div><div class="stage-num">Post-booking</div></td>
+          <td>Receives confirmation, views campaign dashboard, tracks status, reviews post-campaign summary</td>
+          <td>
+            <span class="feeling-pill feel-positive">Satisfied</span>
+            <span class="feeling-pill feel-positive">Confident</span>
+            <span class="feeling-pill feel-positive">Accomplished</span>
+          </td>
+          <td>
+            <div class="opp-item">Real-time status notifications (SMS + email)</div>
+            <div class="opp-item">Proof-of-display photos once live</div>
+            <div class="opp-item">Simple performance summary + easy rebooking</div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="section-divider"><hr class="divider-line"></div>
+
+<!-- HMW -->
+<section style="background: var(--surface-2); max-width: 100%; padding: 80px 0;">
+  <div style="max-width: 1200px; margin: 0 auto; padding: 0 40px;">
+    <div class="section-header">
+      <div>
+        <div class="section-eyebrow">05 — How Might We</div>
+        <h2 class="section-title">Reframing problems<br>as opportunities.</h2>
+      </div>
+      <p class="section-subtitle">Using the HMW framework to unlock design directions for each persona's most critical challenges.</p>
+    </div>
+    <div class="hmw-grid">
+      <div class="hmw-card">
+        <div class="hmw-persona-label">Maria — Local Business Owner</div>
+        <div class="hmw-item"><strong>Remove the bad</strong>Help small businesses advertise without fearing wasted spend?</div>
+        <div class="hmw-item"><strong>Change the status quo</strong>Make booking a billboard as simple as boosting a social media post?</div>
+        <div class="hmw-item"><strong>Question an assumption</strong>Let small businesses try billboard advertising without long-term commitment or large upfront costs?</div>
+      </div>
+      <div class="hmw-card">
+        <div class="hmw-persona-label">Arjun — Startup Founder</div>
+        <div class="hmw-item"><strong>Change the status quo</strong>Allow startups to test billboard campaigns as easily as running A/B tests online?</div>
+        <div class="hmw-item"><strong>Amp up the good</strong>Turn offline billboard data into actionable growth insights for founders?</div>
+        <div class="hmw-item"><strong>Remove the bad</strong>Eliminate long approval cycles that slow down startup marketing experiments?</div>
+      </div>
+      <div class="hmw-card">
+        <div class="hmw-persona-label">Sarah — National Marketing Manager</div>
+        <div class="hmw-item"><strong>Break into pieces</strong>Centralize planning, booking, and reporting for multi-city billboard campaigns?</div>
+        <div class="hmw-item"><strong>Change the status quo</strong>Make OOH planning as measurable and optimizable as digital media?</div>
+        <div class="hmw-item"><strong>Identify unexpected resources</strong>Use real-time performance signals to optimize placements mid-campaign?</div>
+      </div>
+      <div class="hmw-card">
+        <div class="hmw-persona-label">Daniel — Global Brand Director</div>
+        <div class="hmw-item"><strong>Change the status quo</strong>Manage global billboard campaigns from a single unified platform?</div>
+        <div class="hmw-item"><strong>Remove the bad</strong>Reduce compliance risks across different countries and advertising regulations?</div>
+        <div class="hmw-item"><strong>Create an analogy</strong>Make global OOH management feel like one dashboard — not 20 local ones?</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"><hr class="divider-line"></div>
+
+<!-- HYPOTHESIS -->
+<section id="solution">
+  <div class="section-header">
+    <div>
+      <div class="section-eyebrow">06 — Problem Statements &amp; Hypotheses</div>
+      <h2 class="section-title">If we solve this,<br>here's what changes.</h2>
+    </div>
+    <p class="section-subtitle">Grounding each persona's problem in a testable hypothesis that drives design decisions.</p>
+  </div>
+  <div class="hypothesis-grid">
+    <div class="hypothesis-card">
+      <div class="hypothesis-persona-badge"><div class="hyp-dot" style="background: var(--accent);"></div>Maria — Local Business Owner</div>
+      <div class="hyp-block hyp-if">
+        <strong>If / Then</strong>
+        If Maria is guided through a step-by-step booking flow with clear pricing and visual previews, then she will feel confident enough to complete her first billboard booking.
+      </div>
+      <div class="hyp-block hyp-believe">
+        <strong>We believe</strong>
+        Simplifying the booking process and removing pricing ambiguity will increase billboard adoption among local small businesses.
+      </div>
+    </div>
+    <div class="hypothesis-card">
+      <div class="hypothesis-persona-badge"><div class="hyp-dot" style="background: var(--accent-2);"></div>Arjun — Startup Founder</div>
+      <div class="hyp-block hyp-if">
+        <strong>If / Then</strong>
+        If Arjun can compare billboard locations, pricing, and estimated reach in one place, then he will make faster and more confident campaign decisions.
+      </div>
+      <div class="hyp-block hyp-believe">
+        <strong>We believe</strong>
+        Providing comparison tools and basic performance metrics will help startup founders scale billboard advertising more effectively.
+      </div>
+    </div>
+    <div class="hypothesis-card">
+      <div class="hypothesis-persona-badge"><div class="hyp-dot" style="background: var(--accent-3);"></div>Sarah — National Marketing Manager</div>
+      <div class="hyp-block hyp-if">
+        <strong>If / Then</strong>
+        If Sarah can book, edit, and report on multiple billboards from one dashboard, then she can execute national campaigns more efficiently and accurately.
+      </div>
+      <div class="hyp-block hyp-believe">
+        <strong>We believe</strong>
+        Bulk booking, approvals, and standardized reporting will reduce operational overhead for national marketing teams.
+      </div>
+    </div>
+    <div class="hypothesis-card">
+      <div class="hypothesis-persona-badge"><div class="hyp-dot" style="background: var(--yellow);"></div>Daniel — Global Marketing Director</div>
+      <div class="hyp-block hyp-if">
+        <strong>If / Then</strong>
+        If Daniel can manage global campaigns with localized pricing, compliance guidance, and time-zone-aware scheduling, then he can launch international campaigns faster and with less risk.
+      </div>
+      <div class="hyp-block hyp-believe">
+        <strong>We believe</strong>
+        Centralizing global billboard operations will improve speed, consistency, and confidence for international brands.
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"><hr class="divider-line"></div>
+
+<!-- VALUE PROPOSITION -->
+<section>
+  <div class="section-header">
+    <div>
+      <div class="section-eyebrow">07 — Value Proposition</div>
+      <h2 class="section-title">Features become benefits<br>when designed with intent.</h2>
+    </div>
+    <p class="section-subtitle">Every feature on the platform exists to close a specific gap between what users fear and what they need to feel confident.</p>
+  </div>
+  <div class="value-prop-layout">
+    <div class="value-prop-statement">A single, transparent platform that lets <em>any</em> business discover, book, and manage billboard advertising worldwide — without vendors, guesswork, or hidden costs.</div>
+    <div class="feature-benefits">
+      <div class="feature-benefit">
+        <div class="feature-benefit-icon" style="background: var(--accent-light); font-size: 16px;">🗺️</div>
+        <div>
+          <h4>Discovery replaces guesswork</h4>
+          <p>Map-based search with real photos, traffic data, and audience demographics — users understand billboard value before spending anything.</p>
+        </div>
+      </div>
+      <div class="feature-benefit">
+        <div class="feature-benefit-icon" style="background: var(--accent-2-light); font-size: 16px;">💰</div>
+        <div>
+          <h4>Pricing is never a surprise</h4>
+          <p>Transparent cost breakdowns, price locks, and comparison tools mean users feel financially safe — even on small budgets.</p>
+        </div>
+      </div>
+      <div class="feature-benefit">
+        <div class="feature-benefit-icon" style="background: var(--accent-3-light); font-size: 16px;">✅</div>
+        <div>
+          <h4>Creative confidence before go-live</h4>
+          <p>Templates, real-time validation, and billboard mockup previews eliminate rejection anxiety and spec confusion.</p>
+        </div>
+      </div>
+      <div class="feature-benefit">
+        <div class="feature-benefit-icon" style="background: var(--yellow-light); font-size: 16px;">📊</div>
+        <div>
+          <h4>Proof turns payment into trust</h4>
+          <p>Verified vendors, go-live notifications, and proof-of-display photos give users accountability through the full campaign lifecycle.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<div style="background: var(--ink); padding: 80px 0;" id="features">
+  <div style="max-width: 1200px; margin: 0 auto; padding: 0 40px;">
+    <div class="section-header">
+      <div>
+        <div class="section-eyebrow" style="color: var(--accent);">08 — Feature Architecture</div>
+        <h2 class="section-title" style="color: white;">Everything the platform<br>needs to deliver.</h2>
+      </div>
+      <p class="section-subtitle" style="color: rgba(255,255,255,0.35);">Grouped by the user value they unlock — not by technical category.</p>
+    </div>
+    <div class="features-grouped">
+      <div class="feature-group">
+        <div class="feature-group-title"><div class="feature-group-icon" style="background: var(--accent-light); font-size: 14px;">🗺️</div> Discovery</div>
+        <ul class="feature-list">
+          <li>Map-based billboard discovery</li>
+          <li>Location &amp; city search</li>
+          <li>Filters: price, traffic, type, size</li>
+          <li>Real billboard photos + street view</li>
+          <li>Audience &amp; traffic indicators</li>
+          <li>Save to wishlist</li>
+          <li>Side-by-side comparison</li>
+        </ul>
+      </div>
+      <div class="feature-group">
+        <div class="feature-group-title"><div class="feature-group-icon" style="background: #e3f2ef; font-size: 14px;">💳</div> Pricing &amp; Payments</div>
+        <ul class="feature-list">
+          <li>Upfront, transparent pricing</li>
+          <li>Itemised cost breakdown</li>
+          <li>Price lock timer</li>
+          <li>Multi-currency support</li>
+          <li>Secure checkout</li>
+          <li>Invoices, receipts &amp; tax docs</li>
+          <li>Refund &amp; cancellation policies</li>
+        </ul>
+      </div>
+      <div class="feature-group">
+        <div class="feature-group-title"><div class="feature-group-icon" style="background: var(--accent-3-light); font-size: 14px;">📅</div> Booking &amp; Scheduling</div>
+        <ul class="feature-list">
+          <li>Step-by-step booking wizard</li>
+          <li>Availability calendar (real-time)</li>
+          <li>Flexible durations (1 week–custom)</li>
+          <li>Time-zone-aware scheduling</li>
+          <li>Auto-saved drafts</li>
+          <li>Confirmation + go-live alerts</li>
+        </ul>
+      </div>
+      <div class="feature-group">
+        <div class="feature-group-title"><div class="feature-group-icon" style="background: var(--yellow-light); font-size: 14px;">🎨</div> Creative Management</div>
+        <ul class="feature-list">
+          <li>Creative upload with validation</li>
+          <li>Billboard mockup live preview</li>
+          <li>Free design templates</li>
+          <li>Version control</li>
+          <li>Brand asset library</li>
+          <li>Format &amp; resolution checker</li>
+        </ul>
+      </div>
+      <div class="feature-group">
+        <div class="feature-group-title"><div class="feature-group-icon" style="background: #fdecea; font-size: 14px;">📊</div> Analytics &amp; Reports</div>
+        <ul class="feature-list">
+          <li>Estimated impressions &amp; reach</li>
+          <li>Campaign delivery progress</li>
+          <li>Proof-of-display photos</li>
+          <li>Post-campaign summaries</li>
+          <li>Downloadable reports (PDF/CSV)</li>
+          <li>Historical campaign archive</li>
+        </ul>
+      </div>
+      <div class="feature-group">
+        <div class="feature-group-title"><div class="feature-group-icon" style="background: #f0e8ff; font-size: 14px;">🏢</div> Enterprise &amp; Teams</div>
+        <ul class="feature-list">
+          <li>Role-based access control</li>
+          <li>Approval workflows</li>
+          <li>Bulk booking &amp; editing</li>
+          <li>Audit logs</li>
+          <li>Multi-user collaboration</li>
+          <li>Conflict detection</li>
+        </ul>
+      </div>
+      <div class="feature-group">
+        <div class="feature-group-title"><div class="feature-group-icon" style="background: #e8f5e9; font-size: 14px;">🌍</div> Global &amp; Compliance</div>
+        <ul class="feature-list">
+          <li>Multi-language UI</li>
+          <li>Local ad regulation guidance</li>
+          <li>Tax &amp; compliance notes</li>
+          <li>Country-specific formatting</li>
+          <li>Currency normalization</li>
+        </ul>
+      </div>
+      <div class="feature-group">
+        <div class="feature-group-title"><div class="feature-group-icon" style="background: var(--accent-light); font-size: 14px;">🛡️</div> Trust &amp; Support</div>
+        <ul class="feature-list">
+          <li>Verified vendor badges</li>
+          <li>Live chat &amp; ticket support</li>
+          <li>Help center &amp; onboarding</li>
+          <li>FAQs &amp; guided tooltips</li>
+          <li>Auto-save &amp; offline resilience</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section-divider"><hr class="divider-line"></div>
+
+<!-- EDGE CASES -->
+<section>
+  <div class="section-header">
+    <div>
+      <div class="section-eyebrow">09 — Edge Cases &amp; Safeguards</div>
+      <h2 class="section-title">Designing for<br>when things go wrong.</h2>
+    </div>
+    <p class="section-subtitle">Booking systems fail in predictable ways. Every edge case has a designed response.</p>
+  </div>
+  <div class="edge-cases-grid">
+    <div class="edge-case-card">
+      <span class="edge-case-num">EC — 01</span>
+      <h4>Billboard taken mid-booking</h4>
+      <p>Another advertiser books while user is in checkout flow.</p>
+      <span class="edge-safeguard">Temporary hold + countdown timer</span>
+    </div>
+    <div class="edge-case-card">
+      <span class="edge-case-num">EC — 02</span>
+      <h4>Price changes after selection</h4>
+      <p>Demand or seasonality updates the price after user selects dates.</p>
+      <span class="edge-safeguard">Price lock for 10 minutes</span>
+    </div>
+    <div class="edge-case-card">
+      <span class="edge-case-num">EC — 03</span>
+      <h4>Creative fails compliance</h4>
+      <p>Uploaded ad violates local advertising regulations or size specs.</p>
+      <span class="edge-safeguard">Clear error + guided fix suggestions</span>
+    </div>
+    <div class="edge-case-card">
+      <span class="edge-case-num">EC — 04</span>
+      <h4>Payment succeeds, booking fails</h4>
+      <p>System or vendor error after successful payment.</p>
+      <span class="edge-safeguard">Auto-refund + confirmation email</span>
+    </div>
+    <div class="edge-case-card">
+      <span class="edge-case-num">EC — 05</span>
+      <h4>Vendor cancels post-confirmation</h4>
+      <p>Billboard owner cancels due to maintenance or regulatory issues.</p>
+      <span class="edge-safeguard">Alternatives surfaced + platform credits</span>
+    </div>
+    <div class="edge-case-card">
+      <span class="edge-case-num">EC — 06</span>
+      <h4>Time zone scheduling error</h4>
+      <p>Global brand schedules without realizing local time zone difference.</p>
+      <span class="edge-safeguard">Time-zone-aware preview at scheduling step</span>
+    </div>
+    <div class="edge-case-card">
+      <span class="edge-case-num">EC — 07</span>
+      <h4>Wrong location selected</h4>
+      <p>User misreads map and books a similar nearby billboard by mistake.</p>
+      <span class="edge-safeguard">Confirmation step with map + 24hr free cancel</span>
+    </div>
+    <div class="edge-case-card">
+      <span class="edge-case-num">EC — 08</span>
+      <h4>Internet lost mid-booking</h4>
+      <p>Local business owner loses connectivity while completing checkout.</p>
+      <span class="edge-safeguard">Auto-save drafts at every step</span>
+    </div>
+    <div class="edge-case-card">
+      <span class="edge-case-num">EC — 09</span>
+      <h4>Simultaneous team edits</h4>
+      <p>Two users make conflicting changes to the same campaign at once.</p>
+      <span class="edge-safeguard">Conflict detection + version locking</span>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"><hr class="divider-line"></div>
+
+<!-- USER STORIES -->
+<section>
+  <div class="section-header">
+    <div>
+      <div class="section-eyebrow">10 — User Stories</div>
+      <h2 class="section-title">Designing from<br>real user needs.</h2>
+    </div>
+    <p class="section-subtitle">Eight stories across four personas — each one a design requirement in disguise.</p>
+  </div>
+  <div class="stories-layout">
+    <div class="story-card">
+      <div class="story-as">As a local small business owner</div>
+      <div class="story-want">I want to see nearby billboards with traffic and visibility indicators</div>
+      <div class="story-so">So that <em>I can confidently choose a location without feeling overwhelmed or misled.</em></div>
+    </div>
+    <div class="story-card">
+      <div class="story-as">As a budget-conscious café owner</div>
+      <div class="story-want">I want to see clear, upfront pricing before I commit</div>
+      <div class="story-so">So that <em>I don't fear hidden costs or wasting money.</em></div>
+    </div>
+    <div class="story-card">
+      <div class="story-as">As a startup founder running experiments</div>
+      <div class="story-want">I want to book short-term campaigns and adjust or pause them easily</div>
+      <div class="story-so">So that <em>I can test ideas quickly without long-term risk.</em></div>
+    </div>
+    <div class="story-card">
+      <div class="story-as">As a growth marketer at a startup</div>
+      <div class="story-want">I want to compare locations by cost, reach, and audience type</div>
+      <div class="story-so">So that <em>I can allocate my limited budget to the highest-impact options.</em></div>
+    </div>
+    <div class="story-card">
+      <div class="story-as">As a startup founder</div>
+      <div class="story-want">I want to upload and preview my creative on real billboard mockups</div>
+      <div class="story-so">So that <em>I can be confident my brand looks professional in the real world.</em></div>
+    </div>
+    <div class="story-card">
+      <div class="story-as">As a national brand marketing manager</div>
+      <div class="story-want">I want a centralized dashboard to manage bookings, creatives, and approvals across regions</div>
+      <div class="story-so">So that <em>I can maintain brand consistency and reduce operational chaos.</em></div>
+    </div>
+    <div class="story-card">
+      <div class="story-as">As a marketing manager</div>
+      <div class="story-want">I want proof-of-display and campaign timelines for each billboard</div>
+      <div class="story-so">So that <em>I can confidently report execution accuracy to leadership.</em></div>
+    </div>
+    <div class="story-card">
+      <div class="story-as">As a global marketing director</div>
+      <div class="story-want">I want standardized metrics, compliance checks, and currency-normalized pricing across countries</div>
+      <div class="story-so">So that <em>I can scale campaigns globally without legal or financial risk.</em></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Hoar<span>ding</span></div>
+  <p>A UX case study for a billboard advertising platform — from local business to global brand. Designed to make outdoor advertising as accessible as a social media boost.</p>
+  <p style="margin-top: 16px; font-size: 12px; opacity: 0.4;">UX Research · Information Architecture · Interaction Design · 2025–26</p>
+</footer>
+
+</body>
+</html>
