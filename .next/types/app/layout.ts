@@ -1,4 +1,4 @@
-// File: C:\Users\walaw\Downloads\portfolio-final_1\portfolio-output-live\app\layout.tsx
+// File: C:\Users\walaw\Downloads\portfolio-final_1\tinypixel_live\app\layout.tsx
 import * as entry from '../../../app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

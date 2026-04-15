@@ -173,13 +173,13 @@ export default function InfoPanel({ onGetInTouch, onPortfolioClick, showLikeButt
       </motion.h1>
 
       <motion.p variants={stagger.item} className="font-display text-[#8B8070] font-medium mb-8" style={{ fontSize: "clamp(1rem, 2vw, 1.4rem)", letterSpacing: "0.02em" }}>
-        UX Designer & Frontend Developer
+        UX Designer & Fullstack Developer
       </motion.p>
 
       <motion.div variants={stagger.item} className="w-12 h-0.5 bg-[#FF6B35] mb-8" />
 
       <motion.p variants={stagger.item} className="font-body text-[#8B8070] leading-relaxed mb-10 max-w-sm" style={{ fontSize: "clamp(0.875rem, 1.5vw, 1rem)" }}>
-        UX designer and frontend developer passionate about creating simple, intuitive, and visually appealing digital experiences. I enjoy learning about user needs, experimenting with design ideas, and bringing them to life using modern frontend technologies while continuously improving my skills.
+        UX designer and fullstack developer passionate about creating simple, intuitive, and visually appealing digital experiences. I enjoy learning about user needs, experimenting with design ideas, and bringing them to life using modern frontend and backend technologies while continuously improving my skills.
       </motion.p>
 
       {/* Portfolio button */}
